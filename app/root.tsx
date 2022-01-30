@@ -26,7 +26,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="w-screen h-screen bg-gray-100 p-2 overflow-hidden">
+      <body className="w-screen h-screen bg-gray-100 overflow-hidden">
         <Outlet />
         <ScrollRestoration />
         <Scripts />
