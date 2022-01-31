@@ -3,7 +3,7 @@ import { BinaryValue, Direction, Edge } from 'onoff';
 import { useCallback, useEffect, useState } from 'react';
 import { environment } from '../environments/environment';
 
-const directions: Direction[] = ['in', 'out', 'high', 'low'];
+const directions: Direction[] = ['out', 'in', 'high', 'low'];
 const edges: Edge[] = ['none', 'rising', 'falling', 'both'];
 const values: BinaryValue[] = [0, 1];
 function getNextOrFirst<T>(value: T, values: T[]) {
@@ -31,7 +31,7 @@ export default function Index() {
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   const change = useCallback(
     async (
@@ -40,7 +40,7 @@ export default function Index() {
     ) => {
       const next = { ...gpio, ...update };
 
-      await fetch(`http://localhost:3333/api/gpio/${next.pin}`, {
+      await fetch(`${environment.apiBase}/api/gpio/${next.pin}`, {
         method: 'post',
         body: JSON.stringify(next),
         headers: {

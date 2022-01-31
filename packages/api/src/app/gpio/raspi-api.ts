@@ -32,12 +32,28 @@ export const setGpio = async (
     console.error(`GPIO with pin ${pin} does not exist.`);
     return;
   }
+  console.log('setGpio:input', {
+    pin,
+    value,
+    direction,
+    edge,
+  });
 
   const gpio: Gpio = pins[pin];
 
   gpio.setDirection(direction);
   gpio.setEdge(edge);
   await gpio.write(value);
+
+  console.log('setGpio:output', gpio);
+
+  return {
+    pin: pin,
+    edge: gpio.edge(),
+    activeLow: gpio.activeLow(),
+    direction: gpio.direction(),
+    value: await gpio.read(),
+  };
 };
 
 export const getGpio = async (pin: number): Promise<GpioDefinition | null> => {

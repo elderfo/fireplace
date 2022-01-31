@@ -34,23 +34,28 @@ app.get('/api/gpio/:pin', async (req, res) => {
 });
 
 app.post('/api/gpio/:pin', async (req, res) => {
-  if (!req.params.pin) {
-    res.sendStatus(404);
-    return;
+  try {
+    if (!req.params.pin) {
+      res.sendStatus(404);
+      return;
+    }
+
+    const pin = parseInt(req.params.pin);
+    const gpio = await getGpio(pin);
+
+    if (!gpio) {
+      res.sendStatus(404);
+      return;
+    }
+
+    const json = req.body;
+    const updated = await setGpio(pin, json.value, json.direction, json.edge);
+
+    res.send(updated);
+  } catch (err) {
+    console.error('Failed to write to GPIO', err);
+    res.sendStatus(500);
   }
-
-  const pin = parseInt(req.params.pin);
-  const gpio = await getGpio(pin);
-
-  if (!gpio) {
-    res.sendStatus(404);
-    return;
-  }
-
-  const json = req.body;
-  await setGpio(pin, json.value, json.direction, json.edge);
-
-  res.sendStatus(200);
 });
 
 const port = process.env.port || 3333;
