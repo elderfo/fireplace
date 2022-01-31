@@ -3,6 +3,7 @@ import { getGpio, getGpios, setGpio } from './app/gpio/raspi-api';
 import * as cors from 'cors';
 const app = express();
 
+app.use(express.static('public'));
 app.use(express.json());
 app.use(
   cors({
@@ -47,7 +48,6 @@ app.post('/api/gpio/:pin', async (req, res) => {
   }
 
   const json = req.body;
-  console.log('JSON', json);
   await setGpio(pin, json.value, json.direction, json.edge);
 
   res.sendStatus(200);

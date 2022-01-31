@@ -2,9 +2,6 @@ import { Gpio } from 'onoff';
 import { MockGpio } from './mock-gpio';
 import { isBrowser } from './utils';
 
-const id = Math.random().toString(32);
-console.log('ID', id);
-
 const J8Pins = [
   4, 5, 6,
   // 12, PWM0

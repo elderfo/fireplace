@@ -1,12 +1,7 @@
-import { Route, Link } from 'react-router-dom';
 import Index from './gpio';
 
 export function App() {
-  return (
-    <>
-      <Index />
-    </>
-  );
+  return <Index />;
 }
 
 export default App;

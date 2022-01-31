@@ -38,7 +38,6 @@ export const setGpio = async (
   gpio.setDirection(direction);
   gpio.setEdge(edge);
   await gpio.write(value);
-  console.log('setGpio', gpio);
 };
 
 export const getGpio = async (pin: number): Promise<GpioDefinition | null> => {

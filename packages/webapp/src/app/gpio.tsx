@@ -1,6 +1,7 @@
 import { GpioDefinition } from '@fire-pie/common';
 import { BinaryValue, Direction, Edge } from 'onoff';
 import { useCallback, useEffect, useState } from 'react';
+import { environment } from '../environments/environment';
 
 const directions: Direction[] = ['in', 'out', 'high', 'low'];
 const edges: Edge[] = ['none', 'rising', 'falling', 'both'];
@@ -19,7 +20,7 @@ export default function Index() {
   const [gpios, setGpios] = useState<GpioDefinition[]>([]);
 
   const refresh = useCallback(async () => {
-    const response = await fetch('http://localhost:3333/api/gpio', {
+    const response = await fetch(`${environment.apiBase}/api/gpio`, {
       method: 'get',
     });
 
