@@ -37,7 +37,7 @@
           "namedChunks": false,
           "extractLicenses": true,
           "vendorChunk": false,
-          "outputPath": "dist/packages/api/public"
+          "outputPath": "dist/public"
         }
       }
     },

@@ -3,7 +3,6 @@
   "projects": {
     "api": "packages/api",
     "common": "packages/common",
-    "webapp": "packages/webapp",
-    "webapp-e2e": "packages/webapp-e2e"
+    "webapp": "packages/webapp"
   }
 }

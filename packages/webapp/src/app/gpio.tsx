@@ -50,14 +50,11 @@ export default function Index() {
       });
       await refresh();
     },
-    []
+    [refresh]
   );
 
   return (
     <div className="flex flex-col w-screen h-screen overflow-auto">
-      <header className="p-2 bg-gray-700 text-white font-bold">
-        Fireplace
-      </header>
       <div className="flex-1 p-2">
         {gpios.map((gpio) => (
           <div key={gpio.pin} className="flex flex-row">

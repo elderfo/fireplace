@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { getGpio, getGpios, setGpio } from './app/gpio/raspi-api';
+import { changeState, getConfig, setConfig } from './app/gpio/raspi-api';
 import * as cors from 'cors';
 const app = express();
 
@@ -11,52 +11,84 @@ app.use(
   })
 );
 
-app.get('/api/gpio', async (req, res) => {
-  const gpios = await getGpios();
-  res.send(gpios);
+// app.get('/api/gpio', async (req, res) => {
+//   const gpios = await getGpios();
+//   res.send(gpios);
+// });
+
+// app.get('/api/gpio/:pin', async (req, res) => {
+//   if (!req.params.pin) {
+//     res.sendStatus(404);
+//     return;
+//   }
+
+//   const pin = parseInt(req.params.pin);
+//   const gpio = await getGpio(pin);
+
+//   if (!gpio) {
+//     res.sendStatus(404);
+//     return;
+//   }
+
+//   res.send(gpio);
+// });
+
+app.post('/api/config', async (req, res) => {
+  const json = req.body as { trigger: number; relay: number };
+
+  await setConfig(json.relay, json.trigger);
+
+  res.sendStatus(202);
 });
 
-app.get('/api/gpio/:pin', async (req, res) => {
-  if (!req.params.pin) {
-    res.sendStatus(404);
+app.post('/api/on', async (_, res) => {
+  const config = await getConfig();
+  if (!config) {
+    res.sendStatus(400);
     return;
   }
 
-  const pin = parseInt(req.params.pin);
-  const gpio = await getGpio(pin);
+  await changeState(0);
 
-  if (!gpio) {
-    res.sendStatus(404);
+  res.sendStatus(202);
+});
+
+app.post('/api/off', async (_, res) => {
+  const config = await getConfig();
+  if (!config) {
+    res.sendStatus(400);
     return;
   }
 
-  res.send(gpio);
+  await changeState(1);
+
+  res.sendStatus(202);
 });
 
-app.post('/api/gpio/:pin', async (req, res) => {
-  try {
-    if (!req.params.pin) {
-      res.sendStatus(404);
-      return;
-    }
+// app.post('/api/gpio/:pin', async (req, res) => {
+//   try {
+//     if (!req.params.pin) {
+//       res.sendStatus(404);
+//       return;
+//     }
 
-    const pin = parseInt(req.params.pin);
-    const gpio = await getGpio(pin);
+//     const pin = parseInt(req.params.pin);
+//     const gpio = await getGpio(pin);
 
-    if (!gpio) {
-      res.sendStatus(404);
-      return;
-    }
+//     if (!gpio) {
+//       res.sendStatus(404);
+//       return;
+//     }
 
-    const json = req.body;
-    const updated = await setGpio(pin, json.value, json.direction, json.edge);
+//     const json = req.body;
+//     const updated = await setGpio(pin, json.value, json.direction, json.edge);
 
-    res.send(updated);
-  } catch (err) {
-    console.error('Failed to write to GPIO', err);
-    res.sendStatus(500);
-  }
-});
+//     res.send(updated);
+//   } catch (err) {
+//     console.error('Failed to write to GPIO', err);
+//     res.sendStatus(500);
+//   }
+// });
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
